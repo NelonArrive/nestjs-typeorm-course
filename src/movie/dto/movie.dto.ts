@@ -1,4 +1,12 @@
-import { IsInt, IsNotEmpty, Max, Min } from 'class-validator'
+import {
+	IsEnum,
+	IsInt,
+	IsNotEmpty,
+	IsOptional,
+	Max,
+	Min
+} from 'class-validator'
+import { Genre } from '../entities/movie.entity'
 
 export class MovieDto {
 	@IsNotEmpty()
@@ -8,5 +16,11 @@ export class MovieDto {
 	@IsInt()
 	@Min(1888)
 	@Max(new Date().getFullYear())
-	releaseDate: number
+	releaseYear: number
+
+	@IsOptional()
+	description?: string
+
+	@IsEnum(Genre)
+	genre: Genre
 }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { MovieEntity } from './entities/movie.entity'
+import { Genre, MovieEntity } from './entities/movie.entity'
 import { Repository } from 'typeorm'
 import { MovieDto } from './dto/movie.dto'
 
@@ -13,9 +13,6 @@ export class MovieService {
 
 	async getAll(): Promise<MovieEntity[]> {
 		return await this.movieRepository.find({
-			where: {
-				isPublic: true
-			},
 			order: {
 				createdAt: 'desc'
 			}
@@ -24,7 +21,7 @@ export class MovieService {
 		})
 	}
 
-	async getById(id: number): Promise<MovieEntity> {
+	async getById(id: string): Promise<MovieEntity> {
 		const movie = await this.movieRepository.findOne({
 			where: { id }
 		})
@@ -35,12 +32,17 @@ export class MovieService {
 	}
 
 	async create(dto: MovieDto): Promise<MovieEntity> {
-		const movie = this.movieRepository.create(dto)
+		const movie = this.movieRepository.create({
+			title: dto.title,
+			releaseYear: dto.releaseYear,
+			description: dto.description,
+			genre: dto.genre || Genre.COMEDY
+		})
 
 		return await this.movieRepository.save(movie)
 	}
 
-	async update(id: number, dto: MovieDto): Promise<boolean> {
+	async update(id: string, dto: MovieDto): Promise<boolean> {
 		const movie = await this.getById(id)
 
 		Object.assign(movie, dto)
@@ -50,7 +52,7 @@ export class MovieService {
 		return true
 	}
 
-	async delete(id: number): Promise<number> {
+	async delete(id: string): Promise<string> {
 		const movie = await this.getById(id)
 
 		await this.movieRepository.remove(movie)
