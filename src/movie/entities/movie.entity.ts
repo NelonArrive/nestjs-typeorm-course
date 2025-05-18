@@ -77,7 +77,9 @@ export class MovieEntity {
 
 	@ManyToMany(() => ActorEntity, actor => actor.movies)
 	@JoinTable({
-		name: 'movie_actors'
+		name: 'movie_actors',
+		joinColumn: { name: 'movie_id', referencedColumnName: 'id' },
+		inverseJoinColumn: { name: 'actor_id', referencedColumnName: 'id' }
 	})
 	actors: ActorEntity[]
 

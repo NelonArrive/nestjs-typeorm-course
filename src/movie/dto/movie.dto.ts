@@ -1,8 +1,10 @@
 import {
+	IsArray,
 	IsEnum,
 	IsInt,
 	IsNotEmpty,
 	IsOptional,
+	IsUUID,
 	Max,
 	Min
 } from 'class-validator'
@@ -23,4 +25,8 @@ export class MovieDto {
 
 	@IsEnum(Genre)
 	genre: Genre
+
+	@IsArray()
+	@IsUUID('4', { each: true })
+	actorsIds: string[]
 }
