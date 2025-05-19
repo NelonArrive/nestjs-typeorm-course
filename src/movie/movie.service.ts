@@ -26,7 +26,8 @@ export class MovieService {
 
 	async getById(id: string): Promise<MovieEntity> {
 		const movie = await this.movieRepository.findOne({
-			where: { id }
+			where: { id },
+			relations: ['actors']
 		})
 
 		if (!movie) throw new NotFoundException('Фильм не найден')
